@@ -1,0 +1,226 @@
+{
+  "@bean": "com.cyoda.plugins.datasource.dtos.DataSourceConfigsContainerDto",
+  "dataSources": [
+    {
+      "id": "86c97f70-90d9-11ef-b47d-a6dbe11f1714",
+      "name": "Connection to Accounting Demo Data_ffeb2c10-90c9-11ef-af9b-b61b150e91aa",
+      "lastUpdated": 1729644981502,
+      "description": "",
+      "connections": [
+        {
+          "@bean": "com.cyoda.plugins.datasource.dtos.connection.HttpConnectionDetailsDto",
+          "name": "Connection to Accounting Demo Data",
+          "baseUrl": "https://raw.githubusercontent.com",
+          "headers": {},
+          "authType": "NONE",
+          "authConfig": {
+            "name": "",
+            "authOperationConfigs": [],
+            "numOfRetries": 1,
+            "cacheConfig": {
+              "ttl": 0,
+              "persistCache": false
+            }
+          }
+        }
+      ],
+      "endpoints": [
+        {
+          "@bean": "com.cyoda.plugins.datasource.dtos.endpoint.HttpEndpointDto",
+          "consumerConfig": {
+            "consumerType": "COBI_MAPPER",
+            "configId": "a5dd63a0-90d8-11ef-b47d-a6dbe11f1714"
+          },
+          "chainings": [],
+          "operation": "Fetch Accounting Data",
+          "cache": {
+            "parameters": [],
+            "ttl": 0
+          },
+          "connectionIndex": 0,
+          "type": "test",
+          "query": "/Cyoda-platform/cyoda-ai/refs/heads/develop/data/test-inputs/v1/mappings/accounting_demo_1.json",
+          "method": "GET",
+          "parameters": [],
+          "bodyTemplate": "",
+          "connectionTimeout": 300,
+          "readWriteTimeout": 300
+        }
+      ],
+      "active": true
+    },
+    {
+      "id": "aaba3e10-90d9-11ef-b47d-a6dbe11f1714",
+      "name": "Connection to Accounting Demo Data 2_ffeb2c10-90c9-11ef-af9b-b61b150e91aq",
+      "lastUpdated": 1729645018533,
+      "description": "",
+      "connections": [
+        {
+          "@bean": "com.cyoda.plugins.datasource.dtos.connection.HttpConnectionDetailsDto",
+          "name": "Connection to Accounting Demo Data",
+          "baseUrl": "https://raw.githubusercontent.com",
+          "headers": {},
+          "authType": "NONE",
+          "authConfig": {
+            "name": "",
+            "authOperationConfigs": [],
+            "numOfRetries": 1,
+            "cacheConfig": {
+              "ttl": 0,
+              "persistCache": false
+            }
+          }
+        }
+      ],
+      "endpoints": [
+        {
+          "@bean": "com.cyoda.plugins.datasource.dtos.endpoint.HttpEndpointDto",
+          "consumerConfig": {
+            "consumerType": "COBI_MAPPER",
+            "configId": "c8c082d0-90d8-11ef-b47d-a6dbe11f1714"
+          },
+          "chainings": [],
+          "operation": "Fetch Accounting Data",
+          "cache": {
+            "parameters": [],
+            "ttl": 0
+          },
+          "connectionIndex": 0,
+          "type": "test",
+          "query": "/Cyoda-platform/cyoda-ai/refs/heads/develop/data/test-inputs/v1/mappings/accounting_demo_2.json",
+          "method": "GET",
+          "parameters": [],
+          "bodyTemplate": "",
+          "connectionTimeout": 300,
+          "readWriteTimeout": 300
+        }
+      ],
+      "active": true
+    }
+  ],
+  "chainings": [],
+  "mappings": [
+    {
+      "id": "a5dd63a0-90d8-11ef-b47d-a6dbe11f1714",
+      "name": "accounting_demo_1",
+      "lastUpdated": 1729644564237,
+      "dataType": "JSON",
+      "description": "",
+      "entityMappings": [
+        {
+          "id": {
+            "id": "a5d155b0-90d8-11ef-b47d-a6dbe11f1714"
+          },
+          "name": "accounting_demo_1",
+          "entityClass": "employee_expense.1000",
+          "entityRelationConfigs": [
+            {
+              "srcRelativeRootPath": "root:/*"
+            }
+          ],
+          "columns": [
+            {
+              "srcColumnPath": "financial_record/category",
+              "dstCyodaColumnPath": "expenseCategory",
+              "dstCyodaColumnPathType": "java.lang.String",
+              "dstCollectionElementSetModes": [],
+              "transformer": {
+                "type": "COMPOSITE",
+                "children": [
+                  {
+                    "type": "SINGLE",
+                    "transformerKey": "com.cyoda.plugins.mapping.core.parser.valuetransformers.SourceObjectValueTransformer$ToString",
+                    "parameters": []
+                  },
+                  {
+                    "type": "SINGLE",
+                    "transformerKey": "com.cyoda.plugins.mapping.core.parser.valuetransformers.StringValueTransformer$Trim",
+                    "parameters": []
+                  }
+                ]
+              }
+            }
+          ],
+          "functionalMappings": [],
+          "columnPathsForUniqueCheck": [],
+          "metadata": [],
+          "cobiCoreMetadata": [],
+          "script": {
+            "body": "var target = entity.modelAccessor;\ntarget.employeeName = input.financial_record.staff_member.full_name;\ntarget.department = input.financial_record.staff_member.unit;\ntarget.position = input.financial_record.staff_member.role;\ntarget.expenseDate = input.financial_record.transaction_date;\ntarget.expenseCategory = input.financial_record.category;\ntarget.expenseDescription = input.financial_record.details.description;\ntarget.amount = input.financial_record.details.amount_spent;\ntarget.projectName = input.financial_record.details.associated_project;\ntarget.quarter = input.financial_record.fiscal_quarter;\ntarget.year = input.financial_record.fiscal_year\n",
+            "inputSrcPaths": [],
+            "inputMetaPaths": [],
+            "reusableScripts": []
+          },
+          "entityFilter": {
+            "@bean": "com.cyoda.core.conditions.GroupCondition",
+            "operator": "AND",
+            "conditions": []
+          }
+        }
+      ],
+      "sampleContent": "[{\"financial_record\":{\"staff_member\":{\"full_name\":\"Alice Smith\",\"unit\":\"Marketing\",\"role\":\"Marketing Specialist\"},\"transaction_date\":\"2024-10-10\",\"category\":\"Advertising\",\"details\":{\"description\":\"Online ad campaign\",\"amount_spent\":1200,\"associated_project\":\"Brand Awareness\"},\"fiscal_quarter\":\"Q4\",\"fiscal_year\":2024,\"status\":\"Approved\"}},{\"financial_record\":{\"staff_member\":{\"full_name\":\"Alice Smith\",\"unit\":\"Marketing\",\"role\":\"Marketing Specialist\"},\"transaction_date\":\"2024-10-15\",\"category\":\"Travel\",\"details\":{\"description\":\"Flight to industry conference\",\"amount_spent\":350,\"associated_project\":\"Industry Networking\"},\"fiscal_quarter\":\"Q4\",\"fiscal_year\":2024,\"status\":\"Pending\"}},{\"financial_record\":{\"staff_member\":{\"full_name\":\"Bob Johnson\",\"unit\":\"Human Resources\",\"role\":\"HR Coordinator\"},\"transaction_date\":\"2024-10-05\",\"category\":\"Training\",\"details\":{\"description\":\"Employee workshop\",\"amount_spent\":450,\"associated_project\":\"Employee Development\"},\"fiscal_quarter\":\"Q4\",\"fiscal_year\":2024,\"status\":\"Approved\"}},{\"financial_record\":{\"staff_member\":{\"full_name\":\"Bob Johnson\",\"unit\":\"Human Resources\",\"role\":\"HR Coordinator\"},\"transaction_date\":\"2024-10-12\",\"category\":\"Accommodation\",\"details\":{\"description\":\"Hotel stay for training session\",\"amount_spent\":200,\"associated_project\":\"Training Session\"},\"fiscal_quarter\":\"Q4\",\"fiscal_year\":2024,\"status\":\"Approved\"}},{\"financial_record\":{\"staff_member\":{\"full_name\":\"Charlie Brown\",\"unit\":\"Information Technology\",\"role\":\"Systems Analyst\"},\"transaction_date\":\"2024-10-20\",\"category\":\"Software Licensing\",\"details\":{\"description\":\"Annual licensing fee for new software\",\"amount_spent\":300,\"associated_project\":\"System Upgrade\"},\"fiscal_quarter\":\"Q4\",\"fiscal_year\":2024,\"status\":\"Approved\"}},{\"financial_record\":{\"staff_member\":{\"full_name\":\"Charlie Brown\",\"unit\":\"Information Technology\",\"role\":\"Systems Analyst\"},\"transaction_date\":\"2024-10-25\",\"category\":\"Infrastructure\",\"details\":{\"description\":\"New server purchase\",\"amount_spent\":5000,\"associated_project\":\"Infrastructure Improvement\"},\"fiscal_quarter\":\"Q4\",\"fiscal_year\":2024,\"status\":\"Pending\"}},{\"financial_record\":{\"staff_member\":{\"full_name\":\"Diana Prince\",\"unit\":\"Finance\",\"role\":\"Financial Analyst\"},\"transaction_date\":\"2024-10-12\",\"category\":\"Conference Attendance\",\"details\":{\"description\":\"Attendance at annual finance conference\",\"amount_spent\":800,\"associated_project\":\"Annual Financial Review\"},\"fiscal_quarter\":\"Q4\",\"fiscal_year\":2024,\"status\":\"Approved\"}},{\"financial_record\":{\"staff_member\":{\"full_name\":\"Diana Prince\",\"unit\":\"Finance\",\"role\":\"Financial Analyst\"},\"transaction_date\":\"2024-10-18\",\"category\":\"Client Meals\",\"details\":{\"description\":\"Lunch meeting with clients\",\"amount_spent\":150,\"associated_project\":\"Client Engagement\"},\"fiscal_quarter\":\"Q4\",\"fiscal_year\":2024,\"status\":\"Approved\"}},{\"financial_record\":{\"staff_member\":{\"full_name\":\"Edward Elric\",\"unit\":\"Engineering\",\"role\":\"Mechanical Engineer\"},\"transaction_date\":\"2024-10-18\",\"category\":\"Materials\",\"details\":{\"description\":\"Prototype materials purchase\",\"amount_spent\":620,\"associated_project\":\"Product Development\"},\"fiscal_quarter\":\"Q4\",\"fiscal_year\":2024,\"status\":\"Approved\"}},{\"financial_record\":{\"staff_member\":{\"full_name\":\"Edward Elric\",\"unit\":\"Engineering\",\"role\":\"Mechanical Engineer\"},\"transaction_date\":\"2024-10-22\",\"category\":\"Travel\",\"details\":{\"description\":\"Travel expenses to supplier meeting\",\"amount_spent\":400,\"associated_project\":\"Supplier Relations\"},\"fiscal_quarter\":\"Q4\",\"fiscal_year\":2024,\"status\":\"Pending\"}},{\"financial_record\":{\"staff_member\":{\"full_name\":\"Fiona Green\",\"unit\":\"Sales\",\"role\":\"Sales Executive\"},\"transaction_date\":\"2024-10-15\",\"category\":\"Travel\",\"details\":{\"description\":\"Trip to meet potential client\",\"amount_spent\":750,\"associated_project\":\"Client Acquisition\"},\"fiscal_quarter\":\"Q4\",\"fiscal_year\":2024,\"status\":\"Approved\"}}]",
+      "metadata": "{\"entityMappingsMetaDatas\":[{\"uiId\":1,\"cobiPathsRelations\":[{\"srcColumnPath\":\"financial_record/category\",\"dstColumnPath\":\"expenseCategory\",\"jsonPath\":\"financial_record/category\"}],\"isShowNoneMappingFields\":false,\"isPolymorphicList\":false}]}"
+    },
+    {
+      "id": "c8c082d0-90d8-11ef-b47d-a6dbe11f1714",
+      "name": "accounting_demo_2",
+      "lastUpdated": 1729644858913,
+      "dataType": "JSON",
+      "description": "",
+      "entityMappings": [
+        {
+          "id": {
+            "id": "a5d155b0-90d8-11ef-b47d-a6dbe11f1714"
+          },
+          "name": "accounting_demo_1",
+          "entityClass": "employee_expense.1000",
+          "entityRelationConfigs": [
+            {
+              "srcRelativeRootPath": "root:/*"
+            }
+          ],
+          "columns": [
+            {
+              "srcColumnPath": "expense_entry/employee_info/name",
+              "dstCyodaColumnPath": "employeeName",
+              "dstCyodaColumnPathType": "java.lang.String",
+              "dstCollectionElementSetModes": [],
+              "transformer": {
+                "type": "COMPOSITE",
+                "children": [
+                  {
+                    "type": "SINGLE",
+                    "transformerKey": "com.cyoda.plugins.mapping.core.parser.valuetransformers.SourceObjectValueTransformer$ToString",
+                    "parameters": []
+                  },
+                  {
+                    "type": "SINGLE",
+                    "transformerKey": "com.cyoda.plugins.mapping.core.parser.valuetransformers.StringValueTransformer$Trim",
+                    "parameters": []
+                  }
+                ]
+              }
+            }
+          ],
+          "functionalMappings": [],
+          "columnPathsForUniqueCheck": [],
+          "metadata": [],
+          "cobiCoreMetadata": [],
+          "script": {
+            "body": "var target = entity.modelAccessor;\ntarget.employeeName = input.expense_entry.employee_info.name;\ntarget.department = input.expense_entry.employee_info.department;\ntarget.position = input.expense_entry.employee_info.position;\ntarget.expenseDate = input.expense_entry.date_of_expense;\ntarget.expenseCategory = input.expense_entry.expense_type;\ntarget.expenseDescription = input.expense_entry.expense_details.item_description;\ntarget.amount = input.expense_entry.expense_details.cost;\ntarget.projectName = input.expense_entry.expense_details.related_project;\ntarget.quarter = input.expense_entry.quarter_of_financial_year;\ntarget.year = input.expense_entry.year_of_finance;\n",
+            "inputSrcPaths": [],
+            "inputMetaPaths": [],
+            "reusableScripts": []
+          },
+          "entityFilter": {
+            "@bean": "com.cyoda.core.conditions.GroupCondition",
+            "operator": "AND",
+            "conditions": []
+          }
+        }
+      ],
+      "sampleContent": "[{\"expense_entry\":{\"employee_info\":{\"name\":\"Alice Smith\",\"department\":\"Marketing\",\"position\":\"Marketing Specialist\"},\"date_of_expense\":\"2024-10-10\",\"expense_type\":\"Advertising\",\"expense_details\":{\"item_description\":\"Online ad campaign\",\"cost\":1200,\"related_project\":\"Brand Awareness\"},\"quarter_of_financial_year\":\"Q4\",\"year_of_finance\":2024,\"approval_status\":\"Approved\"}},{\"expense_entry\":{\"employee_info\":{\"name\":\"Alice Smith\",\"department\":\"Marketing\",\"position\":\"Marketing Specialist\"},\"date_of_expense\":\"2024-10-15\",\"expense_type\":\"Travel\",\"expense_details\":{\"item_description\":\"Flight to industry conference\",\"cost\":350,\"related_project\":\"Industry Networking\"},\"quarter_of_financial_year\":\"Q4\",\"year_of_finance\":2024,\"approval_status\":\"Pending\"}},{\"expense_entry\":{\"employee_info\":{\"name\":\"Bob Johnson\",\"department\":\"Human Resources\",\"position\":\"HR Coordinator\"},\"date_of_expense\":\"2024-10-05\",\"expense_type\":\"Training\",\"expense_details\":{\"item_description\":\"Employee workshop\",\"cost\":450,\"related_project\":\"Employee Development\"},\"quarter_of_financial_year\":\"Q4\",\"year_of_finance\":2024,\"approval_status\":\"Approved\"}},{\"expense_entry\":{\"employee_info\":{\"name\":\"Bob Johnson\",\"department\":\"Human Resources\",\"position\":\"HR Coordinator\"},\"date_of_expense\":\"2024-10-12\",\"expense_type\":\"Accommodation\",\"expense_details\":{\"item_description\":\"Hotel stay for training session\",\"cost\":200,\"related_project\":\"Training Session\"},\"quarter_of_financial_year\":\"Q4\",\"year_of_finance\":2024,\"approval_status\":\"Approved\"}},{\"expense_entry\":{\"employee_info\":{\"name\":\"Charlie Brown\",\"department\":\"Information Technology\",\"position\":\"Systems Analyst\"},\"date_of_expense\":\"2024-10-20\",\"expense_type\":\"Software Licensing\",\"expense_details\":{\"item_description\":\"Annual licensing fee for new software\",\"cost\":300,\"related_project\":\"System Upgrade\"},\"quarter_of_financial_year\":\"Q4\",\"year_of_finance\":2024,\"approval_status\":\"Approved\"}},{\"expense_entry\":{\"employee_info\":{\"name\":\"Charlie Brown\",\"department\":\"Information Technology\",\"position\":\"Systems Analyst\"},\"date_of_expense\":\"2024-10-25\",\"expense_type\":\"Infrastructure\",\"expense_details\":{\"item_description\":\"New server purchase\",\"cost\":5000,\"related_project\":\"Infrastructure Improvement\"},\"quarter_of_financial_year\":\"Q4\",\"year_of_finance\":2024,\"approval_status\":\"Pending\"}},{\"expense_entry\":{\"employee_info\":{\"name\":\"Diana Prince\",\"department\":\"Finance\",\"position\":\"Financial Analyst\"},\"date_of_expense\":\"2024-10-12\",\"expense_type\":\"Conference Attendance\",\"expense_details\":{\"item_description\":\"Attendance at annual finance conference\",\"cost\":800,\"related_project\":\"Annual Financial Review\"},\"quarter_of_financial_year\":\"Q4\",\"year_of_finance\":2024,\"approval_status\":\"Approved\"}},{\"expense_entry\":{\"employee_info\":{\"name\":\"Diana Prince\",\"department\":\"Finance\",\"position\":\"Financial Analyst\"},\"date_of_expense\":\"2024-10-18\",\"expense_type\":\"Client Meals\",\"expense_details\":{\"item_description\":\"Lunch meeting with clients\",\"cost\":150,\"related_project\":\"Client Engagement\"},\"quarter_of_financial_year\":\"Q4\",\"year_of_finance\":2024,\"approval_status\":\"Approved\"}},{\"expense_entry\":{\"employee_info\":{\"name\":\"Edward Elric\",\"department\":\"Engineering\",\"position\":\"Mechanical Engineer\"},\"date_of_expense\":\"2024-10-18\",\"expense_type\":\"Materials\",\"expense_details\":{\"item_description\":\"Prototype materials purchase\",\"cost\":620,\"related_project\":\"Product Development\"},\"quarter_of_financial_year\":\"Q4\",\"year_of_finance\":2024,\"approval_status\":\"Approved\"}},{\"expense_entry\":{\"employee_info\":{\"name\":\"Edward Elric\",\"department\":\"Engineering\",\"position\":\"Mechanical Engineer\"},\"date_of_expense\":\"2024-10-22\",\"expense_type\":\"Travel\",\"expense_details\":{\"item_description\":\"Travel expenses to supplier meeting\",\"cost\":400,\"related_project\":\"Supplier Relations\"},\"quarter_of_financial_year\":\"Q4\",\"year_of_finance\":2024,\"approval_status\":\"Pending\"}},{\"expense_entry\":{\"employee_info\":{\"name\":\"Fiona Green\",\"department\":\"Sales\",\"position\":\"Sales Executive\"},\"date_of_expense\":\"2024-10-15\",\"expense_type\":\"Travel\",\"expense_details\":{\"item_description\":\"Trip to meet potential client\",\"cost\":750,\"related_project\":\"Client Acquisition\"},\"quarter_of_financial_year\":\"Q4\",\"year_of_finance\":2024,\"approval_status\":\"Approved\"}}]",
+      "metadata": "{\"entityMappingsMetaDatas\":[{\"uiId\":1,\"cobiPathsRelations\":[{\"srcColumnPath\":\"expense_entry/employee_info/name\",\"dstColumnPath\":\"employeeName\",\"jsonPath\":\"expense_entry/employee_info/name\"}],\"isShowNoneMappingFields\":false,\"isPolymorphicList\":false}]}"
+    }
+  ]
+}
